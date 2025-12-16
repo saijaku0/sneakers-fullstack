@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SneakersShop.Application.DTO;
 using SneakersShop.Infrastructure;
 using SneakersShop.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SneakersShop.API.Controllers
 {
@@ -67,7 +68,7 @@ namespace SneakersShop.API.Controllers
             return Ok(new { Token = token });
         }
 
-        private string GenerateJwtToken(User user)
+        private static string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("SuperSecretKey12345678901234567890_MakeItLonger");
@@ -84,6 +85,32 @@ namespace SneakersShop.API.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public IActionResult GetCurrentUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = _context.Users.Find(Guid.Parse(userId));
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new
+            {
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.Role,
+                user.Id
+            });
         }
     }
 }
