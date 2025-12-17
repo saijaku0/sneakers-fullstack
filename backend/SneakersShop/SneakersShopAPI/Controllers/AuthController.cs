@@ -29,7 +29,7 @@ namespace SneakersShop.API.Controllers
 
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerUserDto.Password);
 
-            var newUser = new Domain.Entities.User
+            var newUser = new User
             {
                 Id = Guid.NewGuid(),
                 FirstName = registerUserDto.FirstName,
@@ -62,6 +62,13 @@ namespace SneakersShop.API.Controllers
             {
                 return Unauthorized("Invalid password.");
             }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
 
             var token = GenerateJwtToken(user);
 
