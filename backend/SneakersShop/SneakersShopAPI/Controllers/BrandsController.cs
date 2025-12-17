@@ -44,7 +44,7 @@ namespace SneakersShop.API.Controllers
             return Ok(brand);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<CreateBrandDTO>> CreateBrand([FromBody] CreateBrandDTO createBrandDto)
         {

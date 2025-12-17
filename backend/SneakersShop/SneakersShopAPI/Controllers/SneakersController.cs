@@ -63,7 +63,7 @@ namespace SneakersShop.API.Controllers
             return Ok(sneaker);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CreateSneaker(CreateSneakerDTO sneakerDto)
         {

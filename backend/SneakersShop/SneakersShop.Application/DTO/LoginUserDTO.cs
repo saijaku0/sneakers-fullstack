@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿using System.ComponentModel.DataAnnotations;
-=======
 using System.ComponentModel.DataAnnotations;
->>>>>>> feature/backend-user
 
 namespace SneakersShop.Application.DTO
 {
