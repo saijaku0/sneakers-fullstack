@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace SneakersShop.Application.DTO
 {
@@ -9,3 +7,4 @@ namespace SneakersShop.Application.DTO
         public record LoginUserDTORecord(string Email, string Password);
     }
 }
+
