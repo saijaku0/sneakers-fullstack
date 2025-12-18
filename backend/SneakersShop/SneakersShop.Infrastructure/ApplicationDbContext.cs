@@ -9,5 +9,7 @@ namespace SneakersShop.Infrastructure
         public DbSet<Brand> Brands { get; set; } = null!;
         public DbSet<Sneaker> Sneakers { get; set; } = null!;
         public DbSet<ProductStock> ProductStocks { get; set; } = null!;
+        public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<OrderItem> OrderItems { get; set; } = null!;
     }
 }
