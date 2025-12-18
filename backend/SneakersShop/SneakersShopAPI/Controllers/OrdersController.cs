@@ -51,10 +51,10 @@ namespace SneakersShop.API.Controllers
                     .Include(s => s.Sneaker)
                     .FirstOrDefaultAsync(s => s.SneakerId == itemDto.SneakerId && s.Size == itemDto.Size);
 
-                if(stockEntry == null) 
+                if (stockEntry == null)
                     return BadRequest($"Sneaker with ID {itemDto.SneakerId} and size {itemDto.Size} is not available in stock.");
 
-                if(stockEntry.Quantity < itemDto.Quantity)
+                if (stockEntry.Quantity < itemDto.Quantity)
                     return BadRequest($"Insufficient stock for Sneaker ID {itemDto.SneakerId} in size {itemDto.Size}. Requested: {itemDto.Quantity}, Available: {stockEntry.Quantity}.");
 
                 stockEntry.Quantity -= itemDto.Quantity;
@@ -83,7 +83,7 @@ namespace SneakersShop.API.Controllers
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdString))
                 return Unauthorized();
-            
+
             var userId = Guid.Parse(userIdString);
 
             var orders = await _context.Orders
@@ -91,7 +91,7 @@ namespace SneakersShop.API.Controllers
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Sneaker)
                 .OrderByDescending(o => o.OrderDate)
-                .Select(o => new 
+                .Select(o => new
                 {
                     o.Id,
                     o.OrderDate,
@@ -100,7 +100,7 @@ namespace SneakersShop.API.Controllers
                     o.PhoneNumber,
                     o.Address,
                     o.TotalPrice,
-                    Items = o.OrderItems.Select(oi => new 
+                    Items = o.OrderItems.Select(oi => new
                     {
                         oi.SneakerId,
                         SneakerName = oi.Sneaker!.Title,
@@ -112,4 +112,5 @@ namespace SneakersShop.API.Controllers
                 .ToListAsync();
             return Ok(orders);
         }
+    }
 }
