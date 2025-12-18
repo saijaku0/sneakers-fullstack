@@ -28,7 +28,13 @@ namespace SneakersShop.API.Controllers
                     {
                         Id = s.Brand.Id,
                         Name = s.Brand.Name
-                    }
+                    },
+                    ProductStocks = s.ProductStocks.Select(ps => new ProductStockDTO.ProductStockDTORecord
+                    {
+                        Id = ps.Id,
+                        Size = ps.Size,
+                        Quantity = ps.Quantity
+                    }).ToList()
                 })
                 .ToListAsync();
 
@@ -51,7 +57,13 @@ namespace SneakersShop.API.Controllers
                     {
                         Id = s.Brand.Id,
                         Name = s.Brand.Name
-                    }
+                    },
+                    ProductStocks = s.ProductStocks.Select(ps => new ProductStockDTO.ProductStockDTORecord
+                    {
+                        Id = ps.Id,
+                        Size = ps.Size,
+                        Quantity = ps.Quantity
+                    }).ToList()
                 })
                 .FirstOrDefaultAsync();
 
@@ -78,6 +90,33 @@ namespace SneakersShop.API.Controllers
             _context.Sneakers.Add(sneaker);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetSneaker), new { id = sneaker.Id }, new { id = sneaker.Id });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{sneakerId}/stock")]
+        public async Task<ActionResult> AddProductStock(int sneakerId, CreateProductStockDTO.CreateProductStockDTORecord stockDto)
+        {
+            var sneaker = await _context.Sneakers.FindAsync(sneakerId);
+            if (sneaker == null)
+            {
+                return NotFound("Sneaker not found");
+            }
+            var productStock = new ProductStock
+            {
+                Size = stockDto.Size,
+                Quantity = stockDto.Quantity,
+                Sneaker = sneaker,
+                SneakerId = sneakerId
+            };
+            _context.ProductStocks.Add(productStock);
+            await _context.SaveChangesAsync();
+            var resultDto = new ProductStockDTO.ProductStockDTORecord
+            {
+                Id = productStock.Id,
+                Size = productStock.Size,
+                Quantity = productStock.Quantity
+            };
+            return CreatedAtAction(nameof(GetSneaker), new { id = sneakerId }, resultDto);
         }
     }
 }

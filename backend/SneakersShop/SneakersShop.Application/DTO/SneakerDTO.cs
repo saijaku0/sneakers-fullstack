@@ -8,5 +8,6 @@
         public decimal Price { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
         public BrandDTO Brand { get; set; } = new BrandDTO();
+        public List<ProductStockDTO.ProductStockDTORecord> ProductStocks { get; set; } = [];
     }
 }
