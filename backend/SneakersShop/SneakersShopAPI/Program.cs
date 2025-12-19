@@ -53,6 +53,16 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -67,6 +77,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
