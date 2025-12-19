@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakersShop.Application.DTO;
 using SneakersShop.Domain.Entities;
+using SneakersShop.Domain.Enums;
 using SneakersShop.Infrastructure;
 using System.Security.Claims;
 
@@ -13,6 +14,20 @@ namespace SneakersShop.API.Controllers
     public class OrdersController(ApplicationDbContext context) : ControllerBase
     {
         private readonly ApplicationDbContext _context = context;
+
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+                return NotFound($"Order with ID {id} not found.");
+            if (!Enum.TryParse<OrderStatus>(status, true, out var newStatus))
+                return BadRequest("Invalid order status.");
+            order.Status = newStatus;
+            await _context.SaveChangesAsync();
+            return Ok($"Order ID {id} status updated to {newStatus}.");
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderDTO createOrderDto)
