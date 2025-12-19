@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SneakersShop.Application.Interfaces;
 using SneakersShop.Infrastructure;
+using SneakersShop.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +36,8 @@ builder.Services.AddOpenApiDocument(configure =>
     configure.OperationProcessors.Add(
         new NSwag.Generation.Processors.Security.AspNetCoreOperationSecurityScopeProcessor("Bearer"));
 });
+
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddAuthentication(options =>
 {

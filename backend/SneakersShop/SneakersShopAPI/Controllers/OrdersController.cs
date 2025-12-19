@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakersShop.Application.DTO;
+using SneakersShop.Application.Interfaces;
 using SneakersShop.Domain.Entities;
 using SneakersShop.Domain.Enums;
 using SneakersShop.Infrastructure;
@@ -11,9 +12,10 @@ namespace SneakersShop.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrdersController(ApplicationDbContext context) : ControllerBase
+    public class OrdersController(ApplicationDbContext context, IEmailService emailService) : ControllerBase
     {
         private readonly ApplicationDbContext _context = context;
+        private readonly IEmailService _emailService = emailService;
 
         [Authorize(Roles = "Admin")]
         [HttpPatch("{id}/status")]
@@ -90,6 +92,9 @@ namespace SneakersShop.API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                
+                await _emailService.SendEmailAsync(user.Email, "Order Confirmation", $"Your order #{order.Id} has been created successfully.");
+
                 return Ok(new { OrderId = order.Id, Message = "Order created successfully." });
             }
             catch (DbUpdateConcurrencyException)
