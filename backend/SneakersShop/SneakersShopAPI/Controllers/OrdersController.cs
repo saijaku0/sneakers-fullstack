@@ -58,6 +58,7 @@ namespace SneakersShop.API.Controllers
                     return BadRequest($"Insufficient stock for Sneaker ID {itemDto.SneakerId} in size {itemDto.Size}. Requested: {itemDto.Quantity}, Available: {stockEntry.Quantity}.");
 
                 stockEntry.Quantity -= itemDto.Quantity;
+                stockEntry.Version = Guid.NewGuid();
 
                 var orderItem = new OrderItem
                 {
@@ -71,9 +72,15 @@ namespace SneakersShop.API.Controllers
                 order.TotalPrice += orderItem.Price * itemDto.Quantity;
             }
             _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { OrderId = order.Id, Message = "Order created successfully." });
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(new { OrderId = order.Id, Message = "Order created successfully." });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict("A concurrency error occurred while processing your order. Please try again.");
+            }
         }
 
         [HttpGet("my")]

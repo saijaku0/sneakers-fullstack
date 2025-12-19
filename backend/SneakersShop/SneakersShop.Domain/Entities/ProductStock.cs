@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SneakersShop.Domain.Entities
 {
@@ -10,5 +11,7 @@ namespace SneakersShop.Domain.Entities
         public int SneakerId { get; set; }
         [JsonIgnore]
         public required Sneaker Sneaker { get; set; }
+        [ConcurrencyCheck]
+        public Guid Version { get; set; } = Guid.NewGuid();
     }
 }
