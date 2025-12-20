@@ -28,7 +28,13 @@ namespace SneakersShop.API.Controllers
                     {
                         Id = s.Brand.Id,
                         Name = s.Brand.Name
-                    }
+                    },
+                    ProductStocks = s.ProductStocks.Select(ps => new ProductStockDTO.ProductStockDTORecord
+                    {
+                        Id = ps.Id,
+                        Size = ps.Size,
+                        Quantity = ps.Quantity
+                    }).ToList()
                 })
                 .ToListAsync();
 
@@ -51,7 +57,13 @@ namespace SneakersShop.API.Controllers
                     {
                         Id = s.Brand.Id,
                         Name = s.Brand.Name
-                    }
+                    },
+                    ProductStocks = s.ProductStocks.Select(ps => new ProductStockDTO.ProductStockDTORecord
+                    {
+                        Id = ps.Id,
+                        Size = ps.Size,
+                        Quantity = ps.Quantity
+                    }).ToList()
                 })
                 .FirstOrDefaultAsync();
 
@@ -78,6 +90,85 @@ namespace SneakersShop.API.Controllers
             _context.Sneakers.Add(sneaker);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetSneaker), new { id = sneaker.Id }, new { id = sneaker.Id });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{sneakerId}/stock")]
+        public async Task<ActionResult> AddProductStock(int sneakerId, CreateProductStockDTO.CreateProductStockDTORecord stockDto)
+        {
+            var sneaker = await _context.Sneakers.FindAsync(sneakerId);
+            if (sneaker == null)
+            {
+                return NotFound("Sneaker not found");
+            }
+            var productStock = new ProductStock
+            {
+                Size = stockDto.Size,
+                Quantity = stockDto.Quantity,
+                Sneaker = sneaker,
+                SneakerId = sneakerId
+            };
+            _context.ProductStocks.Add(productStock);
+            await _context.SaveChangesAsync();
+            var resultDto = new ProductStockDTO.ProductStockDTORecord
+            {
+                Id = productStock.Id,
+                Size = productStock.Size,
+                Quantity = productStock.Quantity
+            };
+            return CreatedAtAction(nameof(GetSneaker), new { id = sneakerId }, resultDto);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<SneakerDTO>>> GetSneakers([FromQuery] SneakerQuery query)
+        {
+            var sneakersQuery = _context.Sneakers.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                sneakersQuery = sneakersQuery.Where(s => s.Title.ToLower().Contains(query.SearchTerm.ToLower()));
+            }
+
+            if (query.BrandId.HasValue)
+            {
+                sneakersQuery = sneakersQuery.Where(s => s.BrandId == query.BrandId.Value);
+            }
+
+            var totalCount = await sneakersQuery.CountAsync();
+
+            var items = await sneakersQuery
+                .Skip((query.Page - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .Select(s => new SneakerDTO
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Description = s.Description,
+                    Price = s.Price,
+                    ImageUrl = s.ImageUrl,
+                    Brand = new BrandDTO
+                    {
+                        Id = s.Brand.Id,
+                        Name = s.Brand.Name
+                    },
+                    ProductStocks = s.ProductStocks.Select(ps => new ProductStockDTO.ProductStockDTORecord
+                    {
+                        Id = ps.Id,
+                        Size = ps.Size,
+                        Quantity = ps.Quantity
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            var result = new PagedResult<SneakerDTO>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = query.Page,
+                PageSize = query.PageSize
+            };
+
+            return Ok(result);
         }
     }
 }
