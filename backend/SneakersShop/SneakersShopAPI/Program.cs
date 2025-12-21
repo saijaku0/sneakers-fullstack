@@ -38,6 +38,7 @@ builder.Services.AddOpenApiDocument(configure =>
 });
 
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 builder.Services.AddAuthentication(options =>
 {

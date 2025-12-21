@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakersShop.Application.DTO;
 using SneakersShop.Application.Interfaces;
-using SneakersShop.Domain.Entities;
 using SneakersShop.Domain.Enums;
 using SneakersShop.Infrastructure;
 using System.Security.Claims;
@@ -12,10 +11,10 @@ namespace SneakersShop.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrdersController(ApplicationDbContext context, IEmailService emailService) : ControllerBase
+    public class OrdersController(ApplicationDbContext context, IOrderService orderService) : ControllerBase
     {
         private readonly ApplicationDbContext _context = context;
-        private readonly IEmailService _emailService = emailService;
+        private readonly IOrderService _orderService = orderService;
 
         [Authorize(Roles = "Admin")]
         [HttpPatch("{id}/status")]
@@ -35,7 +34,6 @@ namespace SneakersShop.API.Controllers
         public async Task<IActionResult> CreateOrder(CreateOrderDTO createOrderDto)
         {
             Guid? userId = null;
-            User? user = null;
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
@@ -43,64 +41,19 @@ namespace SneakersShop.API.Controllers
                 if (!string.IsNullOrEmpty(userIdString))
                 {
                     userId = Guid.Parse(userIdString);
-                    user = await _context.Users.FindAsync(userId);
                 }
             }
 
-            var order = new Order
+            var result = await _orderService.CreateOrderAsync(userId, createOrderDto);
+
+            if (!result.Success)
             {
-                UserId = userId,
-                User = user,
-                OrderDate = DateTime.UtcNow,
-                TotalPrice = 0,
-
-                FirstName = createOrderDto.FirstName,
-                LastName = createOrderDto.LastName,
-                PhoneNumber = createOrderDto.PhoneNumber,
-                Address = createOrderDto.Address,
-
-                OrderItems = new List<OrderItem>()
-            };
-
-            foreach (var itemDto in createOrderDto.Items)
-            {
-                var stockEntry = await _context.ProductStocks
-                    .Include(s => s.Sneaker)
-                    .FirstOrDefaultAsync(s => s.SneakerId == itemDto.SneakerId && s.Size == itemDto.Size);
-
-                if (stockEntry == null)
-                    return BadRequest($"Sneaker with ID {itemDto.SneakerId} and size {itemDto.Size} is not available in stock.");
-
-                if (stockEntry.Quantity < itemDto.Quantity)
-                    return BadRequest($"Insufficient stock for Sneaker ID {itemDto.SneakerId} in size {itemDto.Size}. Requested: {itemDto.Quantity}, Available: {stockEntry.Quantity}.");
-
-                stockEntry.Quantity -= itemDto.Quantity;
-                stockEntry.Version = Guid.NewGuid();
-
-                var orderItem = new OrderItem
-                {
-                    SneakerId = itemDto.SneakerId,
-                    Size = itemDto.Size,
-                    Quantity = itemDto.Quantity,
-                    Price = stockEntry.Sneaker!.Price,
-                    Order = order
-                };
-                order.OrderItems.Add(orderItem);
-                order.TotalPrice += orderItem.Price * itemDto.Quantity;
+                if (result.IsConcurrencyError)
+                    return Conflict(result.ErrorMessage);
+                return BadRequest(result.ErrorMessage);
             }
-            _context.Orders.Add(order);
-            try
-            {
-                await _context.SaveChangesAsync();
-                
-                await _emailService.SendEmailAsync(user.Email, "Order Confirmation", $"Your order #{order.Id} has been created successfully.");
 
-                return Ok(new { OrderId = order.Id, Message = "Order created successfully." });
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return Conflict("A concurrency error occurred while processing your order. Please try again.");
-            }
+            return Ok(new { OrderId = result.Data, Message = "Order created successfully." });
         }
 
         [HttpGet("my")]
