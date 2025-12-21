@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SneakersShop.API.Middleware;
 using SneakersShop.Application.Interfaces;
 using SneakersShop.Infrastructure;
 using SneakersShop.Infrastructure.Services;
@@ -60,7 +61,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyHeader()
@@ -80,6 +81,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseMiddleware<ApiKeyMiddleware>();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");

@@ -11,6 +11,7 @@ namespace SneakersShop.Infrastructure
         public DbSet<ProductStock> ProductStocks { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
-        public object StockItems { get; internal set; }
+        //public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+        public DbSet<ApiKey> ApiKeys { get; set; } = null!;
     }
 }
