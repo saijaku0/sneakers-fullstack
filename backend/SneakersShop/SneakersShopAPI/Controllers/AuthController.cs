@@ -8,7 +8,6 @@ using SneakersShop.Application.DTO;
 using SneakersShop.Infrastructure;
 using SneakersShop.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
 
 namespace SneakersShop.API.Controllers
 {
