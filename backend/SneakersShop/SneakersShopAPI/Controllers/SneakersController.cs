@@ -13,34 +13,6 @@ namespace SneakersShop.API.Controllers
     {
         private readonly ApplicationDbContext _context = context;
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<SneakerDTO>>> GetSneakers()
-        {
-            var sneakers = await _context.Sneakers
-                .Select(s => new SneakerDTO
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    Description = s.Description,
-                    Price = s.Price,
-                    ImageUrl = s.ImageUrl,
-                    Brand = new BrandDTO
-                    {
-                        Id = s.Brand.Id,
-                        Name = s.Brand.Name
-                    },
-                    ProductStocks = s.ProductStocks.Select(ps => new ProductStockDTO.ProductStockDTORecord
-                    {
-                        Id = ps.Id,
-                        Size = ps.Size,
-                        Quantity = ps.Quantity
-                    }).ToList()
-                })
-                .ToListAsync();
-
-            return Ok(sneakers);
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<SneakerDTO>> GetSneaker(int id)
         {
