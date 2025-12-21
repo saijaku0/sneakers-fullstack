@@ -19,19 +19,19 @@ jobs:
         dotnet-version: 10.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./backend
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore ./backend
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal ./backend
 
     - name: Merge to Develop
       if: success() 
       run: |
-        git config --global user.name 'GitHub Actions Bot'
-        git config --global user.email 'bot@noreply.github.com'
+        git config --global user.name 'saijaku0'
+        git config --global user.email 'minerking112256@gmail.com'
         
         # Переключаемся на develop
         git checkout develop
