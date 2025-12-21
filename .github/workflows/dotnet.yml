@@ -22,13 +22,13 @@ jobs:
         dotnet-version: 10.0.x
 
     - name: Restore dependencies
-      run: dotnet restore ./backend/SneakersShop.sln
+      run: dotnet restore **/*.sln
 
     - name: Build
-      run: dotnet build --no-restore ./backend/SneakersShop.sln
+      run: dotnet build --no-restore **/*.sln
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal ./backend/SneakersShop.sln
+      run: dotnet test --no-build --verbosity normal **/*.sln
 
     - name: Merge to Develop
       if: success() 
