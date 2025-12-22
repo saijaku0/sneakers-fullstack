@@ -36,11 +36,8 @@ jobs:
         git config --global user.name 'saijaku0'
         git config --global user.email 'minerking112256@gmail.com'
         
-        # Переключаемся на develop
         git checkout develop
         
-        # Сливаем текущую ветку в develop
         git merge ${{ github.ref }}
         
-        # Отправляем изменения обратно в репозиторий
         git push origin develop
