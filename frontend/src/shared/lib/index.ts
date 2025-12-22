@@ -1,1 +1,0 @@
-export type { ContainerInterface } from './interfaces/ContainerInterface';
