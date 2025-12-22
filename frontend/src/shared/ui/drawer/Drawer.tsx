@@ -29,8 +29,6 @@ export default function Drawer({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   if (!mounted) return null;
 
   return createPortal(
@@ -45,7 +43,8 @@ export default function Drawer({
 
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-2xl bg-white p-6 shadow-2xl transition-transform duration-300 ease-in-out sm:max-h-[85vh]", // На мобилках на весь низ
+          "fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-2xl bg-white p-6 shadow-2xl transition-transform duration-300 ease-in-out sm:max-h-[85vh]",
+          "transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
       >

@@ -46,7 +46,8 @@ export default function CartWidget() {
           className={cn(
             "absolute top-full right-0 mt-3 z-50",
             "w-96 rounded-2xl bg-white shadow-2xl ring-1 ring-black/5",
-            "p-5 origin-top-right animate-in fade-in zoom-in-95 duration-200"
+            "p-5 origin-top-right",
+            "animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-300"
           )}
         >
            <h3 className="font-bold text-lg mb-4">Корзина</h3>
