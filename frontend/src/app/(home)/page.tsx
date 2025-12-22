@@ -1,5 +1,4 @@
-"use client";
-import Container from "@/shared/ui/container/Container";
+import { Container } from "@/shared/ui";
 import Header from "@/widgets/Header";
 
 export default function Home() {
