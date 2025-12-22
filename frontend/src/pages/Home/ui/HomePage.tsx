@@ -1,7 +1,7 @@
 import { Container } from "@/shared/ui";
 import { Header } from "@/widgets/Header";
 
-export function HomePage() {
+export function Home() {
   return (
     <Container>
       <Header />
