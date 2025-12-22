@@ -1,5 +1,5 @@
-import { ShoppingCart } from "lucide-react";
 import { CompanyName, Container } from "@/shared/ui";
+import CartWidget from "@/widgets/CartWidget";
 
 export default function Header() {
   return (
@@ -7,7 +7,7 @@ export default function Header() {
       <Container className="flex items-center justify-between p-2 rounded-md shadow backdrop-blur-sm bg-white/30">
         <CompanyName />
 
-        <ShoppingCart />
+        <CartWidget />
       </Container>
     </header>
   );
