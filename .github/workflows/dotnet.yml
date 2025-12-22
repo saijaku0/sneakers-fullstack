@@ -1,0 +1,43 @@
+name: .NET CI & Auto-Merge
+
+on:
+  push:
+    branches: [ "feature/backend*", "refactor/backend*", "test/*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore ./backend/SneakersShop/SneakersShop.slnx
+
+    - name: Build
+      run: dotnet build --no-restore ./backend/SneakersShop/SneakersShop.slnx
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal ./backend/SneakersShop/SneakersShop.slnx
+
+    - name: Merge to Develop
+      if: success() 
+      run: |
+        git config --global user.name 'saijaku0'
+        git config --global user.email 'minerking112256@gmail.com'
+        
+        git checkout develop
+        
+        git merge ${{ github.ref }}
+        
+        git push origin develop
