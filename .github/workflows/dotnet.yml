@@ -2,7 +2,7 @@ name: .NET CI & Auto-Merge
 
 on:
   push:
-    branches: [ "feature/*", "refactor/backend", "test/*"]
+    branches: [ "feature/backend*", "refactor/backend*", "test/*"]
 
 permissions:
   contents: write
