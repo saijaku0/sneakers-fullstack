@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,6 +14,6 @@ export const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Products", "Cart", "User"],
+  tagTypes: ["Products", "Cart", "User", "Sneakers"],
   endpoints: () => ({}),
 });
