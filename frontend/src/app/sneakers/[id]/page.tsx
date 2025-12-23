@@ -98,22 +98,26 @@ export default function SneakerPage({ params }: Props) {
             {product.description}
           </p>
 
-          <h3>Доступные размеры:</h3>
           <div style={{ display: "flex", gap: "10px" }}>
-            {product.productStocks?.map((stock) => (
-              <button
-                key={stock.id}
-                disabled={stock.quantity === 0}
-                style={{
-                  padding: "10px 20px",
-                  border: "1px solid #000",
-                  background: stock.quantity > 0 ? "white" : "#eee",
-                  cursor: stock.quantity > 0 ? "pointer" : "not-allowed",
-                }}
-              >
-                {stock.size}
-              </button>
-            ))}
+            {!isOutOfStock && (
+              <div className="mb-8">
+                <h3 className="font-semibold mb-3">Доступные размеры:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.productStocks
+                    .filter((stock) => stock.quantity > 0)
+                    .sort((a, b) => a.size - b.size)
+                    .map((stock) => (
+                      <div
+                        key={stock.id}
+                        className="border rounded-md px-4 py-2 text-sm font-medium hover:border-black cursor-pointer transition"
+                        title={`Осталось: ${stock.quantity} шт.`}
+                      >
+                        {stock.size} EU
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-between border-t border-b py-6 mb-8">
@@ -126,8 +130,8 @@ export default function SneakerPage({ params }: Props) {
                 className={cn(
                   "inline-flex items-center px-3 py-1 rounded-full text-sm font-medium",
                   isOutOfStock
-                    ? "bg-red-100 text-red-800" 
-                    : "bg-green-100 text-green-800" 
+                    ? "bg-red-100 text-red-800"
+                    : "bg-green-100 text-green-800"
                 )}
               >
                 {isOutOfStock ? "Нет в наличии" : "В наличии"}
