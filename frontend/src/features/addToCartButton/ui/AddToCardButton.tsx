@@ -17,7 +17,6 @@ export const AddToCartButton = ({ product, variant = "full", className }: Props)
   const dispatch = useAppDispatch();
   const [isAdded, setIsAdded] = useState(false);
 
-  // Сбрасываем галочку "Добавлено" через 2 секунды
   useEffect(() => {
     if (isAdded) {
       const timeout = setTimeout(() => setIsAdded(false), 2000);
@@ -26,30 +25,23 @@ export const AddToCartButton = ({ product, variant = "full", className }: Props)
   }, [isAdded]);
 
   const handleClick = (e: React.MouseEvent) => {
-    // 1. ВАЖНО: Останавливаем клик, чтобы не открылась страница товара
     e.preventDefault();
     e.stopPropagation();
 
-    // 2. Добавляем в Redux
-    // dispatch(addToCart(product));
-
-    // 3. Показываем визуальный эффект
     setIsAdded(true);
   };
 
-  // Базовые стили
   const baseStyles = cn(
     "transition-all duration-300 active:scale-95 flex items-center justify-center gap-2",
     isAdded ? "bg-green-500 hover:bg-green-600 text-white" : "bg-black hover:bg-gray-800 text-white",
     className
   );
 
-  // ВАРИАНТ 1: Маленькая кнопка (для карточки товара в списке)
   if (variant === "icon") {
     return (
       <button
         onClick={handleClick}
-        className={cn(baseStyles, "p-2.5 rounded-full shadow-sm")}
+        className={cn(baseStyles, "p-2.5 rounded-full shadow-sm hover:cursor-pointer")}
         aria-label="Добавить в корзину"
       >
         {isAdded ? <Check size={20} /> : <ShoppingCart size={20} />}
@@ -57,7 +49,6 @@ export const AddToCartButton = ({ product, variant = "full", className }: Props)
     );
   }
 
-  // ВАРИАНТ 2: Большая кнопка (для страницы товара)
   return (
     <button
       onClick={handleClick}
