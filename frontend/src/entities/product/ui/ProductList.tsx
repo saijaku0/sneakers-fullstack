@@ -3,18 +3,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGetProductsQuery } from "../api/productApi";
 import { AddToCartButton } from "@/features/addToCartButton";
+import { ProductListSkeleton } from "./ProductListSkeleton";
 
 export const ProductList = () => {
   const router = useRouter();
   const { data: products, error, isLoading } = useGetProductsQuery();
   if (isLoading)
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-128 w-[310px] bg-gray-200 rounded-xl"></div>
-        ))}
-      </div>
-    );
+    return <ProductListSkeleton />;
   if (error)
     return (
       <div className="text-red-500 text-center py-10">

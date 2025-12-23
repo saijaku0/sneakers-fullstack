@@ -7,6 +7,7 @@ import { ProductImage } from "@/entities/product/ui/ProductImage";
 import { ProductInfo } from "@/entities/product/ui/ProductInfo";
 import { ProductStockInfo } from "@/entities/product/ui/ProductStockInfo";
 import { AddToCartButton } from "@/features/addToCartButton/ui/AddToCardButton";
+import { ProductDetailsSkeleton } from "@/entities/product";
 
 interface Props {
   productId: number;
@@ -17,7 +18,7 @@ export const ProductDetails = ({ productId }: Props) => {
   
   const { data: product, isLoading, isError } = useGetProductByIdQuery(productId);
 
-  if (isLoading) return <div className="p-10 text-center">Загрузка...</div>; 
+  if (isLoading) return <ProductDetailsSkeleton />; 
   if (isError || !product) return <div className="p-10 text-center text-red-500">Товар не найден</div>;
 
   const isOutOfStock = product.productStocks.every(s => s.quantity === 0);
