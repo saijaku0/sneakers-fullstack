@@ -12,5 +12,6 @@ export default function SneakerPage({ params }: Props) {
   const { id } = use(params);
 
   const productId = Number(id);
+
   return <ProductPage id={productId} />;
 }

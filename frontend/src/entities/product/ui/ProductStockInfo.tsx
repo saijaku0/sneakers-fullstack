@@ -4,9 +4,16 @@ import { ProductStock } from "../model/types";
 interface Props {
   price: number;
   stocks: ProductStock[];
+  selectedStockId?: number;
+  onSelect?: (stock: ProductStock) => void;
 }
 
-export const ProductStockInfo = ({ price, stocks }: Props) => {
+export const ProductStockInfo = ({
+  price,
+  stocks,
+  selectedStockId,
+  onSelect,
+}: Props) => {
   const totalStock = stocks.reduce((acc, item) => acc + item.quantity, 0);
   const isOutOfStock = totalStock === 0;
 
@@ -21,7 +28,9 @@ export const ProductStockInfo = ({ price, stocks }: Props) => {
           <span
             className={cn(
               "inline-flex items-center px-3 py-1 rounded-full text-sm font-medium",
-              isOutOfStock ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+              isOutOfStock
+                ? "bg-red-100 text-red-800"
+                : "bg-green-100 text-green-800"
             )}
           >
             {isOutOfStock ? "Нет в наличии" : "В наличии"}
@@ -36,15 +45,27 @@ export const ProductStockInfo = ({ price, stocks }: Props) => {
             {stocks
               .filter((s) => s.quantity > 0)
               .sort((a, b) => a.size - b.size)
-              .map((stock) => (
-                <div
-                  key={stock.id}
-                  className="border rounded-md px-4 py-2 text-sm font-medium cursor-default"
-                  title={`Осталось: ${stock.quantity} шт.`}
-                >
-                  {stock.size} EU
-                </div>
-              ))}
+              .map((stock) => {
+                const isSelected = selectedStockId === stock.id;
+
+                return (
+                  <button
+                    key={stock.id}
+                    onClick={() => onSelect?.(stock)}
+                    className={cn(
+                      "border rounded-xl px-4 py-2 text-sm font-medium transition-all",
+                      "hover:cursor-pointer",
+                      isSelected
+                        ? "bg-black text-white border-black"
+                        : "bg-white text-gray-900 border-gray-200 hover:border-black",
+                      "active:scale-95"
+                    )}
+                    title={`Осталось: ${stock.quantity} шт.`}
+                  >
+                    {stock.size} EU
+                  </button>
+                );
+              })}
           </div>
         </div>
       )}

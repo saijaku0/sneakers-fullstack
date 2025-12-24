@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "@/shared/api/baseApi";
 import { sessionSlice } from "@/entities/session";
+import {cartSlice} from "@/entities/cart"
 
 export const store = () => {
   return configureStore({
     reducer: {
-      // Add your reducers here
+      cart: cartSlice.reducer,
       session: sessionSlice.reducer,
       [baseApi.reducerPath]: baseApi.reducer,
     },
