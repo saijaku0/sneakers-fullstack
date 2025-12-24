@@ -1,19 +1,34 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-//import { Button } from "@/shared/ui/button/Button";
+import { useAppSelector } from "@/shared/lib/store/redux";
+import { toast } from "sonner";
 
-export const CheckoutButton = () => {
+interface Props {
+  className?: string;
+  onClose?: () => void;
+}
+
+export const CheckoutButton = ({ className, onClose }: Props) => {
   const router = useRouter();
-  const handleCheckout = () => {
-    // Here we navigate to the checkout page, better check login status leter
-    router.push("/order/checkout");
+  const cartItems = useAppSelector((state) => state.cart.items);
+
+  const handleClick = () => {
+    if (cartItems.length === 0) {
+      toast.error("Корзина пуста");
+      return;
+    }
+
+    if (onClose) onClose();
+
+    router.push("/checkout");
   };
 
   return (
     <button
-      className="w-full bg-black text-white py-3 rounded-xl font-medium hover:bg-gray-800 transition active:scale-[0.98]"
-      onClick={handleCheckout}
+      onClick={handleClick}
+      disabled={cartItems.length === 0}
+      className={`w-full hover:cursor-pointer bg-black text-white py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
     >
       Оформить заказ
     </button>
