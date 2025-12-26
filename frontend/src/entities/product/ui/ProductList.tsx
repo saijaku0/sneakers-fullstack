@@ -15,13 +15,12 @@ export const ProductList = ({ products, isLoading }: ProductListProps) => {
 
   if (isLoading) return <ProductListSkeleton />;
 
-  // Обработка клика
   const handleProductClick = (id: number) => {
     router.push(`/sneakers/${id}`);
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="mb-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {products.map((product) => {
         const isOutOfStock = product.productStocks.every(
           (s) => s.quantity === 0
