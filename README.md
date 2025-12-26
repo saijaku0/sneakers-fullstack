@@ -36,7 +36,7 @@ The application is built on a modern React ecosystem stack using **Feature-Slice
 
 | Технология | Назначение |
 |------------|------------|
-| **Next.js 14** | App Router, hybrid SSR/CSR rendering |
+| **Next.js 16** | App Router, hybrid SSR/CSR rendering |
 | **TypeScript** | Strict typing for code reliability |
 | **Redux Toolkit** | Global state management (Cart, Filters) |
 | **RTK Query** | Caching and API interaction |
@@ -65,7 +65,6 @@ The frontend employs the **FSD** methodology. This structure prevents spaghetti 
 * **Scalable:** Easy to add new features without breaking existing logic.
 
 ``` 
-text
 src/
 ├── app/        # Application initialization and routing (Next.js App Router)
 ├── processes/  # Global processes (e.g., authentication)
