@@ -6,7 +6,7 @@
 ![EF Core](https://img.shields.io/badge/EF%20Core-ORM-green)
 ![Architecture](https://img.shields.io/badge/Architecture-Clean%20%28Onion%29-orange)
 
-**Sneakers Shop** — is a modern Fullstack online sneaker store designed to demonstrate the complete lifecycle of an E-commerce application: from browsing the catalog to placing an actual order.
+**Sneakers Shop** — is a modern Fullstack online sneaker store designed to demonstrate the complete lifecycle of an *E-commerce* application: from browsing the catalog to placing an actual order.
 
 The project is built with a focus on clean architecture, performance, and scalability.
 
