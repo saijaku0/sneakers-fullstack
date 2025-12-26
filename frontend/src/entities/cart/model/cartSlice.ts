@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Sneaker } from "@/entities/product/model/types";
+import { CartItem } from "./types";
 
-export interface CartItem {
-  id: string;           
-  product: Sneaker;     
-  quantity: number;     
-  size: number;         
-  productStockId: number; 
-}
 
 interface CartState {
   items: CartItem[];

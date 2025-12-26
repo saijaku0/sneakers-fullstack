@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/shared/lib/store/redux";
 import { clearCart } from "@/entities/cart/model/cartSlice";
-import { useCreateOrderMutation } from "@/entities/cart/api/orderApi";
+import { useCreateOrderMutation } from "@/entities/order/api/orderApi";
 import { Input } from "@/shared/ui/input/Input";
 import { toast } from "sonner";
 

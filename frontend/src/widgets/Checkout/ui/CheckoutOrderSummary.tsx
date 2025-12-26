@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppSelector } from "@/shared/lib/store/redux";
-import { useCreateOrderMutation } from "@/entities/cart/api/orderApi";
+import { useCreateOrderMutation } from "@/entities/order/api/orderApi";
 import { CheckoutItem } from "@/entities/checkout";
 
 export const CheckoutOrderSummary = () => {
