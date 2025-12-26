@@ -27,8 +27,6 @@ The project is built with a focus on clean architecture, performance, and scalab
 
 <img width="1916" height="911" alt="image" src="https://github.com/user-attachments/assets/1bf10fef-7ff2-4bc6-81e5-35ce1f8e679b" />
 
----
-
 ## 🛠 Tech Stack
 
 ### 🎨 Frontend
