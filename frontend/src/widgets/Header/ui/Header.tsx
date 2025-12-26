@@ -1,4 +1,5 @@
 import { AuthButton } from "@/features/auth";
+import { HeaderSearch } from "@/features/search";
 import { CompanyName, Container } from "@/shared/ui";
 import CartWidget from "@/widgets/CartWidget";
 
@@ -7,6 +8,8 @@ export default function Header() {
     <header className="z-100 sticky top-0 p-2 pt-4">
       <Container className="flex items-center justify-between p-2 rounded-md shadow backdrop-blur-sm bg-white/30">
         <CompanyName />
+
+        <HeaderSearch />
 
         <div className="flex items-center gap-2 sm:gap-4">
           <AuthButton />

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ShoppingCart, X, Plus, Minus } from "lucide-react";
-import { OrderItem } from "../model/types";
+import { OrderItem } from "@/entities/order/model/types";
 import { cn } from "@/shared/lib/utils";
 
 type CartItemWithSize = OrderItem & { size?: number };
