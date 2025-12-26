@@ -1,29 +1,28 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useGetProductsQuery } from "../api/productApi";
 import { AddToCartButton } from "@/features/addToCartButton";
 import { ProductListSkeleton } from "./ProductListSkeleton";
+import { Sneaker } from "@/entities/product/model/types"; 
 
-export const ProductList = () => {
+interface ProductListProps {
+  products: Sneaker[]; 
+  isLoading: boolean;
+}
+
+export const ProductList = ({ products, isLoading }: ProductListProps) => {
   const router = useRouter();
-  const { data: products, error, isLoading } = useGetProductsQuery();
-  if (isLoading)
-    return <ProductListSkeleton />;
-  if (error)
-    return (
-      <div className="text-red-500 text-center py-10">
-        Error loading products
-      </div>
-    );
 
+  if (isLoading) return <ProductListSkeleton />;
+
+  // Обработка клика
   const handleProductClick = (id: number) => {
     router.push(`/sneakers/${id}`);
   };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {products?.items.map((product) => {
+      {products.map((product) => {
         const isOutOfStock = product.productStocks.every(
           (s) => s.quantity === 0
         );
@@ -64,7 +63,9 @@ export const ProductList = () => {
               <h3 className="font-semibold text-lg">{product.title}</h3>
               <h4 className="text-sm text-gray-600">{product.brand.name}</h4>
             </div>
-            <p className="text-gray-500 text-sm mb-4">{product.description}</p>
+            <p className="text-gray-500 text-sm mb-4 line-clamp-2">
+              {product.description}
+            </p>
 
             <div className="flex items-center justify-between mt-auto">
               <span className="text-lg font-bold">${product.price}</span>

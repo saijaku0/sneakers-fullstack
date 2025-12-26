@@ -15,10 +15,6 @@ export const HeaderSearch = () => {
     const value = e.target.value;
     
     dispatch(setSearchQuery(value));
-
-    if (value.length > 0 && pathname !== "/catalog") {
-      router.push("/catalog");
-    }
   };
 
   const handleClear = () => {
