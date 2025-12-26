@@ -13,7 +13,7 @@ import { useMediaQuery } from "@/shared/lib/hooks/useMediaQuery";
 import { useClickOutside } from "@/shared/lib/hooks/useClickOutside";
 import { CheckoutButton } from "@/features/checkoutButton";
 import { cn } from "@/shared/lib/utils";
-import { OrderItem } from "@/entities/cart/model/types";
+import { OrderItem } from "@/entities/order/model/types";
 
 export default function CartWidget() {
   const [isOpen, setIsOpen] = useState(false);
